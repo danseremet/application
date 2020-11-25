@@ -14,6 +14,7 @@
         </div>
         <div v-if="rooms.length > 0" class="max-w-7xl mx-auto py-10 sm:px-6 lg:px-8">
             <jet-section-border/>
+            <rooms-list :rooms="rooms"/>
         </div>
 
     </app-layout>
@@ -22,12 +23,14 @@
 <script>
 import JetSectionBorder from '@src/Jetstream/SectionBorder'
 import CreateRoomForm from './CreateRoomForm';
+import RoomsList from './RoomsList';
 import AppLayout from '@src/Layouts/AppLayout';
 
 export default {
     components: {
         CreateRoomForm,
         AppLayout,
+        RoomsList,
         JetSectionBorder,
     },
     props: {
