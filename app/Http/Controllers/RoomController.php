@@ -103,7 +103,7 @@ class RoomController extends Controller
                 'chairs' => $request->chairs,
                 'ambiant_music' => $request->ambiant_music,
                 'sale_for_profit' => $request->sale_for_profit,
-                'fundraiser' => $request->fundraiser,           
+                'fundraiser' => $request->fundraiser,
             ],
 
             'room_type' => $request->room_type
@@ -185,7 +185,7 @@ class RoomController extends Controller
             'chairs' => $request->chairs,
             'ambiant_music' => $request->ambiant_music,
             'sale_for_profit' => $request->sale_for_profit,
-            'fundraiser' => $request->fundraiser,           
+            'fundraiser' => $request->fundraiser,
         ];
 
         $room->save();
@@ -204,5 +204,51 @@ class RoomController extends Controller
         $room->delete();
 
         return redirect(route('rooms.index'));
+    }
+
+    /**
+     * Filter room by given json payload
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function filter(Request $request)
+    {
+      // None of the request fields are mandatory, only
+      // filter the ones provided from request
+      $numeric_filter = 'numeric|min:0|not_in:0';
+      $request->validate([
+        'capacity_standing' => $numeric_filter,
+        'capacity_sitting' => $numeric_filter,
+        'food' => ['boolean'],
+        'alcohol' => ['boolean'],
+        'a_v_permitted' => ['boolean'],
+        'projector' => ['boolean'],
+        'television' => ['boolean'],
+        'computer' => ['boolean'],
+        'whiteboard' => ['boolean'],
+        'sofas' => $numeric_filter,
+        'coffee_tables' => $numeric_filter,
+        'tables' => $numeric_filter,
+        'chairs' => $numeric_filter,
+        'ambiant_music' => ['boolean'],
+        'sale_for_profit' => ['boolean'],
+        'fundraiser' => ['boolean'],
+      ]);
+
+      // If param value boolean, filter for boolean and if
+      // numeric filter greater than integer in that column
+      $query = Room::query();
+      foreach ($request->toArray() as $key => $value){
+        if(is_numeric($value)){
+          $query->where('attributes->' . $key, '>=', $value);
+        }else{
+          if(is_bool($value)) {
+            $query->where('attributes->' . $key, $value);
+          }
+        }
+
+      }
+      return response()->json($query->get());
     }
 }

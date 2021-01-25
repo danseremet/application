@@ -6,13 +6,14 @@
             </h2>
         </template>
         <div class="py-12">
-             <RoomTable 
-            :rooms="rooms"
+             <RoomTable
+            :rooms="dataRooms"
+            @filterRoomsJson="filterRoomsJson($event)"
             />
         </div>
         <div v-if="booking_requests.length > 0" class="max-w-7xl mx-auto py-10 sm:px-6 lg:px-8">
             <jet-section-border/>
-            <BookingRequestsList 
+            <BookingRequestsList
             :booking_requests="booking_requests"
             :rooms="rooms" 
             />
@@ -26,6 +27,7 @@ import CreateBookingRequestForm from './CreateBookingRequestForm';
 import BookingRequestsList from './BookingRequestsList';
 import AppLayout from '@src/Layouts/AppLayout';
 import RoomTable from '@src/Components/Tables/RoomTable';
+import axios from 'axios';
 
 export default {
     components: {
@@ -50,9 +52,20 @@ export default {
         },
 
     },
-    computed: {
-        availableRooms: function () {
-            return this.rooms.filter(room => room.status == "available");
+    mounted(){
+        this.dataRooms = this.rooms ?? [];
+    },
+    data() {
+        return {
+            dataRooms: []
+        }
+    },
+    methods:{
+        filterRoomsJson(e) {
+            axios.post('/api/filterRooms', e)
+                .then((response)=>{
+                    this.dataRooms = response.data;
+                })
         }
     }
 }
