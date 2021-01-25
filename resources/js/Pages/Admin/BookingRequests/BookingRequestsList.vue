@@ -10,12 +10,13 @@
         <!-- Rooms List -->
         <template #content>
           <div class="space-y-6">
-            <div class="grid grid-cols-7">
+            <div class="grid grid-cols-8">
               <div class="text-md mx-3">User</div>
               <div class="text-md mx-3">Room</div>
               <div class="text-md mx-3">Start Time</div>
               <div class="text-md mx-3">End time</div>
               <div class="text-md mx-3">Status</div>
+              <div class="text-md mx-3">Reference</div>
             </div>
 
             <div
@@ -23,16 +24,23 @@
               :key="booking_request.id"
               class="grid flex items-center"
             >
-              <div class="grid grid-cols-7">
+              <div class="grid grid-cols-8">
                 <div class="text-md mx-3">{{ booking_request.user.name }}</div>
                 <div class="text-md mx-3">{{ booking_request.room.name }}</div>
                 <div class="text-md mx-3">{{ calendar(booking_request.start_time) }}</div>
                 <div class="text-md mx-3">{{ calendar(booking_request.end_time) }}</div>
+                <div class="text-md mx-3">{{ booking_request.status }}</div>
                 <div class="text-md mx-3">
-                  <button
-                    class="cursor-pointer ml-6 text-sm text-blue-800 focus:outline-none"
-                    @click="bookingRequestToTrack = booking_request"
-                  >View</button>
+                  <a 
+                    v-if="booking_request.reference.path"
+                    @click="setReference(booking_request);" 
+                    class="cursor-pointer text-sm text-blue-800 focus:outline-none" 
+                    :href="href"
+                  >Download</a>
+                  <a 
+                    v-else
+                    class="text-sm focus:outline-none" 
+                  >No Files Submitted</a>
                 </div>
                 <div class="text-md mx-3">
                   <button
@@ -145,7 +153,8 @@ export default {
       bookingReference: '',
       bookingRequestToTrack: null,
       bookingRequestBeingUpdated: null,
-      bookingRequestBeingDeleted: null
+      bookingRequestBeingDeleted: null,
+      
     };
   },
 
@@ -161,12 +170,18 @@ export default {
         });
     },
     calendar(timestamp) {
-        return moment(timestamp).local().format('LLL');
+      return moment(timestamp).local().format('LLL');
     },
+    setReference(e) {
+      this.bookingReference = e.reference.path;
+    }
   },
   computed: {
         availableRooms: function () {
-            return this.rooms.filter(room => room.status == "available");
+          return this.rooms.filter(room => room.status == "available");
+        },
+        href () {
+          return 'bookings/download/' + this.bookingReference;          
         }
     }
 };

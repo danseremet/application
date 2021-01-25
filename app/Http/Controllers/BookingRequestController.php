@@ -11,6 +11,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
+use ZipArchive;
+use File;
 
 class BookingRequestController extends Controller
 {
@@ -55,13 +57,13 @@ class BookingRequestController extends Controller
 
         if($request->file())
         {
-            $referenceFolder = $request->room_id.'_'.strtotime($request->start_time).'_reference/';
-
+            $referenceFolder = $request->room_id.'_'.strtotime($request->start_time).'_reference';
+            
             foreach($request->reference as $file)
             {
                 $name = $file->getClientOriginalName();
-                Storage::disk('public')->putFileAs($referenceFolder, $file, $name);
-            }
+                Storage::disk('public')->putFileAs($referenceFolder . '/', $file, $name);
+            }    
         }
 
         $room = Room::available()->findOrFail($request->room_id);
@@ -135,8 +137,8 @@ class BookingRequestController extends Controller
         }
         
         if($request->file())
-        {
-            $referenceFolder = $request->room_id.'_'.strtotime($request->start_time).'_reference/';
+        {    
+            $referenceFolder = $request->room_id.'_'.strtotime($request->start_time).'_reference';
 
             if(isset($booking->reference["path"]))
             {
@@ -145,8 +147,8 @@ class BookingRequestController extends Controller
             foreach($request->reference as $file)
             {
                 $name = $file->getClientOriginalName();
-                Storage::disk('public')->putFileAs($referenceFolder, $file, $name);
-            }
+                Storage::disk('public')->putFileAs($referenceFolder . '/', $file, $name);
+            }  
             $booking->reference = ['path' => $referenceFolder];
             $booking->save();
             
@@ -168,5 +170,26 @@ class BookingRequestController extends Controller
         $booking->delete();
 
         return redirect(route('bookings.index'));
+    }
+
+    public function downloadReferenceFiles($folder) 
+    {
+        $path = Storage::disk('public')->path($folder);
+
+        $zip = new ZipArchive;
+   
+        $fileName = $folder . '.zip';
+   
+        $zip->open(Storage::disk('public')->path($fileName), ZipArchive::CREATE);
+        $files = File::files($path);
+                              
+        foreach ($files as $file) {
+            $relativeNameInZipFile = basename($file);
+            $zip->addFile($file, $relativeNameInZipFile);
+        }             
+        $zip->close();
+
+        return response()->download(Storage::disk('public')->path($fileName))->deleteFileAfterSend(true);
+        
     }
 }
