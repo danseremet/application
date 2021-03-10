@@ -20,7 +20,7 @@ class BookingReviewController extends Controller
 
     public function show(BookingRequest $booking)
     {
-        $booking->loadMissing('requester', 'reviewers', 'reservations', 'reservations.room');
+        $booking->loadMissing('requester', 'reviewers', 'reservations', 'reservations.room', 'comments');
 
         return inertia('Approval/ReviewBooking', [
             'booking' => new BookingResource($booking)
