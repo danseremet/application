@@ -88,4 +88,12 @@ class BookingRequest extends Model
     public function scopePending(Builder $query) {
         $query->where('status', 'review');
     }
+
+    /**
+     * Get the rooms that are part of the booking request.
+     */
+    public function comments(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(Comment::class,'booking_id');
+    }
 }
