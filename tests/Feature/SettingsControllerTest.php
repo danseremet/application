@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Models\Settings;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -110,5 +111,75 @@ class SettingsControllerTest extends TestCase
         ]);
     }
 
+    public function testFormUpdateCreateAppConfig()
+    {
+        $user = $this->createUserWithPermissions(['settings.edit']);
+        $random = Str::random(40);
+        //test if fucntion creates if no option is there
+        $this->assertDatabaseCount('settings', 0);
+        $this->actingAs($user)->post('/admin/settings/app_config', [
+            'label' => 'app_config',
+            'client_secret' => $random,
+            'client_id' => $random,
+            'redirect_uri' => $random,
+            'tenant' => $random
+        ]);
+        
+        $this->assertDatabaseCount('settings', 1);
 
+        $this->assertDatabaseHas('settings', [
+            'slug' => 'app_config',
+            'data' => json_encode([
+                'secret' => $random,
+                'id' => $random,
+                'uri' => $random,
+                'tenant' => $random
+            ]),
+        ]);
+        $random = Str::random(40);
+        //test if function edits if data is already there
+
+        $this->actingAs($user)->post('/admin/settings/app_config', [
+            'label' => 'app_config',
+            'client_secret' => $random,
+            'client_id' => $random,
+            'redirect_uri' => $random,
+            'tenant' => $random
+        ]);
+
+        $this->assertDatabaseCount('settings', 1);
+
+        $this->assertDatabaseHas('settings', [
+            'slug' => 'app_config',
+            'data' => json_encode([
+                'secret' => $random,
+                'id' => $random,
+                'uri' => $random,
+                'tenant' => $random
+            ]),
+        ]);
+    }
+    
+        /**
+     * @test
+     */
+    public function testCanEditBookingInformations()
+    {
+        $setting = Settings::create([
+            'slug' => 'event_description',
+            'data' => json_encode([
+                'html' => '<p>This is a test</p>'
+            ])
+        ]);
+        $response = $this->actingAs($this->createUserWithPermissions(['bookings.update']))->patch('api/booking-setting', [
+            'slug' => 'event_description',
+            'data' => '<p>holla</p>'
+        ]);
+
+        $response->assertStatus(200);
+
+        $this->assertDatabaseHas('settings', ['slug' => $setting->slug, 'data' => json_encode([
+            'html' => '<p>holla</p>'
+        ])]);
+    }
 }
