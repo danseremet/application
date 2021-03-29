@@ -601,13 +601,11 @@
 
           <div class="flex flex-col space-y-4 w-full">
             <div class="flex space-x-2 w-full">
-              <jet-input id="comment" type="text" class="mt-1 w-full"
-                         v-model="form.comment" placeholder="Write a comment...." />
-              <jet-button class="ml-2 my-2" @click.native="submitComment"
-                          :class="{ 'opacity-25': form.processing }"
-                          :disabled="form.processing">
-                Submit
-              </jet-button>
+              <RichTextEditor
+                :editable="true"
+                :incomingText="''"
+                :onSave="saveComment"
+              />
             </div>
             <jet-input-error :message="form.error('comment')" class="mt-2"/>
           </div>
@@ -629,6 +627,7 @@ import JetInput from '@src/Jetstream/Input';
 import JetInputError from '@src/Jetstream/InputError';
 import AppWarning from '@src/Components/Form/Warning';
 import BookingReviewersField from "@src/Components/BookingReviewersField";
+import RichTextEditor from "@src/Components/RichTextEditor";
 
 export default {
   components: {
@@ -641,6 +640,7 @@ export default {
     JetLabel,
     JetInput,
     JetInputError,
+    RichTextEditor,
   },
 
   props: {
@@ -665,6 +665,10 @@ export default {
       this.form.post('/bookings/' + this.booking.id + '/comment', {
         preserveState: true,
       })
+    },
+    saveComment(comment) {
+      this.form.comment = comment;
+      this.submitComment();
     }
 
   },
