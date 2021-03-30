@@ -541,7 +541,81 @@
       </div>
     </div>
 
+    <jet-section-border />
+
     <!-- history details go here -->
+    <div class="bg-grey shadow overflow-hidden sm:rounded-lg">
+      <div class="px-4 py-5 sm:px-6">
+        <h3 class="text-lg leading-6 font-medium text-gray-900">
+          Booking History
+        </h3>
+        <p class="mt-1 max-w-2xl text-sm text-gray-500">
+          User comments and work log
+        </p>
+      </div>
+      <div class="border-t border-gray-200">
+
+        <!-- todo: maybe add a type filter like jira? log vs comments -->
+
+        <!-- comments thread -->
+        <div v-for="comment in booking.comments" class="px-0 mx-auto sm:px-4">
+          <div class="flex-col w-full py-4 mx-auto bg-white sm:px-4 sm:py-4 md:px-4">
+            <div class="flex flex-row">
+              <span class="relative">
+                <img class="object-cover w-12 h-12 border-2 border-gray-300 rounded-full"
+                     :alt="comment.user.id" :src="comment.user.profile_photo_url">
+                <svg v-if="!booking.system" class="absolute right-0 bottom-1 p-1 w-6 h-6 bg-gray-200 rounded-full"
+                     xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
+                </svg>
+              </span>
+              <div class="flex-col mt-1">
+                <div class="flex items-center flex-1 px-4 font-bold leading-tight">
+                  {{ comment.user.name }}
+                  <span class="ml-2 text-xs font-normal text-gray-500">{{ comment.created_diff }}</span>
+                </div>
+                <div v-html="comment.body" class="flex-1 px-2 ml-2 text-sm font-medium leading-loose text-gray-600"></div>
+
+                <!-- maybe delete -->
+<!--                <button class="inline-flex items-center px-1 pt-2 ml-1 flex-column">
+                  <svg class="w-5 h-5 ml-2 text-gray-600 cursor-pointer fill-current hover:text-gray-900" viewBox="0 0 95 78" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M29.58 0c1.53.064 2.88 1.47 2.879 3v11.31c19.841.769 34.384 8.902 41.247 20.464 7.212 12.15 5.505 27.83-6.384 40.273-.987 1.088-2.82 1.274-4.005.405-1.186-.868-1.559-2.67-.814-3.936 4.986-9.075 2.985-18.092-3.13-24.214-5.775-5.78-15.377-8.782-26.914-5.53V53.99c-.01 1.167-.769 2.294-1.848 2.744-1.08.45-2.416.195-3.253-.62L.85 30.119c-1.146-1.124-1.131-3.205.032-4.312L27.389.812c.703-.579 1.49-.703 2.19-.812zm-3.13 9.935L7.297 27.994l19.153 18.84v-7.342c-.002-1.244.856-2.442 2.034-2.844 14.307-4.882 27.323-1.394 35.145 6.437 3.985 3.989 6.581 9.143 7.355 14.715 2.14-6.959 1.157-13.902-2.441-19.964-5.89-9.92-19.251-17.684-39.089-17.684-1.573 0-3.004-1.429-3.004-3V9.936z" fill-rule="nonzero"></path>
+                  </svg>
+                </button>
+                <button class="inline-flex items-center px-1 -ml-1 flex-column">
+                  <svg class="w-5 h-5 text-gray-600 cursor-pointer hover:text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5">
+                    </path>
+                  </svg>
+                </button>-->
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- post comment -->
+        <div class="flex px-0 mx-auto my-4 sm:px-8 space-x-4">
+          <img class="object-cover w-12 h-12 border-2 border-gray-300 rounded-full"
+               :alt="$page.user.id" :src="$page.user.profile_photo_url">
+
+
+          <div class="flex flex-col space-y-4 w-full">
+            <div class="flex space-x-2 w-full">
+              <jet-input id="comment" type="text" class="mt-1 w-full"
+                         v-model="form.comment" placeholder="Write a comment...." />
+              <jet-button class="ml-2 my-2" @click.native="submitComment"
+                          :class="{ 'opacity-25': form.processing }"
+                          :disabled="form.processing">
+                Submit
+              </jet-button>
+            </div>
+            <jet-input-error :message="form.error('comment')" class="mt-2"/>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
   </div>
 </template>
 
@@ -549,6 +623,10 @@
 import JetSectionBorder from '@src/Jetstream/SectionBorder'
 import JetActionSection from '@src/Jetstream/ActionSection'
 import JetFormSection from '@src/Jetstream/FormSection';
+import JetButton from '@src/Jetstream/Button';
+import JetLabel from '@src/Jetstream/Label';
+import JetInput from '@src/Jetstream/Input';
+import JetInputError from '@src/Jetstream/InputError';
 import AppWarning from '@src/Components/Form/Warning';
 import BookingReviewersField from "@src/Components/BookingReviewersField";
 
@@ -559,6 +637,10 @@ export default {
     JetSectionBorder,
     JetActionSection,
     JetFormSection,
+    JetButton,
+    JetLabel,
+    JetInput,
+    JetInputError,
   },
 
   props: {
@@ -566,6 +648,25 @@ export default {
       type: Object,
       required: true,
     },
+  },
+
+  data() {
+    return {
+      form: this.$inertia.form({
+        comment: '',
+      }, {
+        bag: 'createComment',
+      })
+    }
+  },
+
+  methods: {
+    submitComment() {
+      this.form.post('/bookings/' + this.booking.id + '/comment', {
+        preserveState: true,
+      })
+    }
+
   },
 
 }
