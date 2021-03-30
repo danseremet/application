@@ -29,37 +29,4 @@ class CommentsController extends Controller
         return back()->with('flash', ['banner' => 'Your comment was stored!']);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  Request  $request
-     * @param  BookingRequest  $booking
-     * @param  Comment  $comment
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, BookingRequest $booking, Comment $comment)
-    {
-        $request->validateWithBag('updateComment', [
-            'comment' => 'required|string:255'
-        ]);
-
-        $comment->body = $request->comment;
-        $comment->save();
-
-        return back()->with('flash', ['banner' => 'Your comment was updated!']);
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  BookingRequest  $booking
-     * @param  Comment  $comment
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(BookingRequest $booking, Comment $comment)
-    {
-        $comment->delete();
-
-        return back()->with('flash', ['banner' => 'Your comment was deleted!']);
-    }
 }

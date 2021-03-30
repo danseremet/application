@@ -200,8 +200,6 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
         Route::name('comments.')->prefix('{booking}/comment')
             ->middleware('permission:bookings.approve|bookings.create')->group(function () {
             Route::post('/', [CommentsController::class, 'store'])->name('store');
-            Route::put('/{comment}', [CommentsController::class, 'update'])->name('update');
-            Route::delete('/{comment}', [CommentsController::class, 'delete'])->name('delete');
         });
     });
 
