@@ -602,6 +602,7 @@
           <div class="flex flex-col space-y-4 w-full">
             <div class="flex space-x-2 w-full">
               <RichTextEditor
+                class="w-full"
                 :editable="true"
                 :incomingText="''"
                 :onSave="saveComment"
@@ -663,7 +664,8 @@ export default {
   methods: {
     submitComment() {
       this.form.post('/bookings/' + this.booking.id + '/comment', {
-        preserveState: true,
+        preserveState: false,
+        preserveScroll: true
       })
     },
     saveComment(comment) {
