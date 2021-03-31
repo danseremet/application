@@ -49,22 +49,34 @@ class SettingsController extends Controller
     }
 
 
-  public function storeAppLogo(Request $request)
-  {
-    $request->validate([
-      'app_logo' => 'required|image|mimes:jpg,png,jpeg,gif,svg|max:2048',
-      'label' => 'required'
-    ]);
-    $path = '/storage/' . Storage::disk('public')->putFileAs(
-        'logos',
-        $request->file('app_logo'),
-        $request->file('app_logo')->hashName());
-    Settings::updateOrCreate(
-      ['slug' => $request->label],
-      ['data' => ['path' => $path]]
-    );
-    return back();
-  }
+    public function storeAppLogo(Request $request)
+    {
+        $request->validate([
+            'app_logo' => 'required|image|mimes:jpg,png,jpeg,gif,svg|max:2048',
+            'label' => 'required'
+        ]);
+        $path = '/storage/' . Storage::disk('public')->putFileAs(
+                'logos',
+                $request->file('app_logo'),
+                $request->file('app_logo')->hashName());
+        Settings::updateOrCreate(
+            ['slug' => $request->label],
+            ['data' => ['path' => $path]]
+        );
+
+        # Replacing symbolic link for application logo to point to new image.
+        $base_dir = getcwd();
+        chdir('../storage/app/public/logos/');
+        $target = $request->file('app_logo')->hashName();
+        $link = 'app_logo.png';
+        if (file_exists($link)) {
+            unlink($link);
+        }
+        symlink($target, $link);
+        chdir($base_dir);
+
+        return back();
+    }
 
   public function setAppConfig(Request $request)
   {

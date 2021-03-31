@@ -1,7 +1,7 @@
 <x-guest-layout>
     <x-jet-authentication-card >
         <x-slot name="logo">
-        <img src="https://www.csu.qc.ca/wp-content/uploads/2020/01/CSU_logo_Colored.png" alt= "Csu logo">
+        <img src="/storage/logos/app_logo.png" alt= "Csu logo">
         </x-slot>
 
         <x-jet-validation-errors class="mb-4" />
