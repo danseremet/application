@@ -32,9 +32,11 @@ class CommentControllerTest extends TestCase
         $response->assertStatus(302);
         $this->assertDatabaseCount('comments', 1);
         $this->assertDatabaseHas('comments', [
-            'id' => 1,
             'system' => false,
             'body' => $comment,
         ]);
+
+        $response = $this->actingAs($user)->get(route('bookings.view', $booking));
+        $response->assertSessionHasNoErrors();
     }
 }

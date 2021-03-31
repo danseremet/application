@@ -17,15 +17,6 @@ class Comment extends Model
     protected $guarded = ['id'];
 
     /**
-     * Get the booking that created this comment
-     */
-    public function booking()
-    {
-        return $this->belongsTo(BookingRequest::class, 'booking_id');
-    }
-
-
-    /**
      * Get the user that created this comment
      */
     public function user()
