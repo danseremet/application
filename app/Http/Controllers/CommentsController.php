@@ -23,6 +23,7 @@ class CommentsController extends Controller
         ]);
 
         $comment = new Comment;
+        $comment->user_id = $request->user()->id;
         $comment->body = $request->comment;
         $booking->comments()->save($comment);
 
