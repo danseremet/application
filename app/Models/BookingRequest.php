@@ -101,7 +101,7 @@ class BookingRequest extends Model
     }
 
     /**
-     * Get the rooms that are part of the booking request.
+     * Get the comments from the request.
      */
     public function comments(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
