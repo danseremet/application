@@ -11,6 +11,8 @@ class RoomControllerTest extends TestCase
 {
     use RefreshDatabase;
 
+    const ROOM_TYPES = 'rooms.types';
+    const BUILDING_NAMES = 'rooms.buildings';
 
     /**
      * @test
@@ -189,9 +191,9 @@ class RoomControllerTest extends TestCase
             'name' => 'the room',
             'number' => '24',
             'floor' => '2009',
-            'building' => config('rooms.buildings')[0],
+            'building' => config(self::BUILDING_NAMES)[0],
             'status' => 'available',
-            'room_type' => config('rooms.types')[0],
+            'room_type' => config(self::ROOM_TYPES)[0],
             'capacity_standing' => '100',
             'capacity_sitting' => '80',
             'food' => 'true',
@@ -216,9 +218,9 @@ class RoomControllerTest extends TestCase
             'name' => 'the room',
             'number' => '24',
             'floor' => '2009',
-            'building' => config('rooms.buildings')[0],
+            'building' => config(self::BUILDING_NAMES)[0],
             'status' => 'available',
-            'room_type' => config('rooms.types')[0],
+            'room_type' => config(self::ROOM_TYPES)[0],
             'attributes' => json_encode([
                 'capacity_standing' => '100',
                 'capacity_sitting' => '80',
@@ -257,9 +259,9 @@ class RoomControllerTest extends TestCase
             'name' => 'the room',
             'number' => '24',
             'floor' => '2009',
-            'building' => config('rooms.buildings')[0],
+            'building' => config(self::BUILDING_NAMES)[0],
             'status' => 'available',
-            'room_type' => config('rooms.types')[0],
+            'room_type' => config(self::ROOM_TYPES)[0],
             'capacity_standing' => '100',
             'capacity_sitting' => '80',
             'food' => 'true',
@@ -290,9 +292,9 @@ class RoomControllerTest extends TestCase
             'name' => 'the room',
             'number' => '24',
             'floor' => '2009',
-            'building' => config('rooms.buildings')[0],
+            'building' => config(self::BUILDING_NAMES)[0],
             'status' => 'available',
-            'room_type' => config('rooms.types')[0],
+            'room_type' => config(self::ROOM_TYPES)[0],
             'attributes' => json_encode([
                 'capacity_standing' => '100',
                 'capacity_sitting' => '80',
@@ -341,9 +343,9 @@ class RoomControllerTest extends TestCase
             'name' => 'the room',
             'number' => '24',
             'floor' => '2009',
-            'building' => config('rooms.buildings')[0],
+            'building' => config(self::BUILDING_NAMES)[0],
             'status' => 'available',
-            'room_type' => config('rooms.types')[0],
+            'room_type' => config(self::ROOM_TYPES)[0],
             'capacity_standing' => '100',
             'capacity_sitting' => '80',
             'food' => 'true',
@@ -374,9 +376,9 @@ class RoomControllerTest extends TestCase
             'name' => 'the room',
             'number' => '24',
             'floor' => '2009',
-            'building' => config('rooms.buildings')[0],
+            'building' => config(self::BUILDING_NAMES)[0],
             'status' => 'available',
-            'room_type' => config('rooms.types')[0],
+            'room_type' => config(self::ROOM_TYPES)[0],
             'attributes' => json_encode([
                 'capacity_standing' => '100',
                 'capacity_sitting' => '80',
@@ -410,9 +412,9 @@ class RoomControllerTest extends TestCase
             'name' => 'the room',
             'number' => '24',
             'floor' => '2009',
-            'building' => config('rooms.buildings')[0],
+            'building' => config(self::BUILDING_NAMES)[0],
             'status' => 'available',
-            'room_type' => config('rooms.types')[0],
+            'room_type' => config(self::ROOM_TYPES)[0],
             'capacity_standing' => '100',
             'capacity_sitting' => '80',
             'food' => 'true',
