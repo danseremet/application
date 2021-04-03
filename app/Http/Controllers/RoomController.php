@@ -16,6 +16,7 @@ use Carbon\Carbon;
 use \Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Redirector;
+use Illuminate\Validation\Rule;
 use Inertia\ResponseFactory;
 
 class RoomController extends Controller
@@ -31,6 +32,7 @@ class RoomController extends Controller
             'rooms' => new RoomCollection(Room::with('restrictions', 'availabilities', 'blackouts', 'dateRestrictions')->get()),
             'roles' => Role::all(),
             'availableRoomTypes'=> Room::ROOM_TYPES,
+            'availableBuildings' => Room::BUILDING_NAMES,
         ]);
     }
 
@@ -57,7 +59,7 @@ class RoomController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'number' => ['required', 'string', 'max:255'],
             'floor' => ['required', 'integer'],
-            'building' => ['required', 'string', 'max:255'],
+            'building' => ['required', Rule::in(Room::BUILDING_NAMES)],
             'status' => ['required', 'string', 'max:255'],
             'capacity_standing' => ['nullable', 'integer'],
             'capacity_sitting' => ['nullable', 'integer'],
@@ -75,7 +77,7 @@ class RoomController extends Controller
             'ambiant_music' => ['required', 'boolean'],
             'sale_for_profit' => ['required', 'boolean'],
             'fundraiser' => ['required', 'boolean'],
-            'room_type' => ['required', 'string', 'max:255'],
+            'room_type' => ['required', Rule::in(Room::ROOM_TYPES)],
             'availabilities.Monday.opening_hours' => 'nullable|required_with:availabilities.Monday.closing_hours|before:availabilities.Monday.closing_hours',
             'availabilities.Monday.closing_hours' => 'nullable|required_with:availabilities.Monday.opening_hours|after:availabilities.Monday.opening_hours',
             'availabilities.Tuesday.opening_hours' => 'nullable|required_with:availabilities.Tuesday.closing_hours|before:availabilities.Tuesday.closing_hours',
@@ -151,7 +153,7 @@ class RoomController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'number' => ['required', 'string', 'max:255'],
             'floor' => ['required', 'integer'],
-            'building' => ['required', 'string', 'max:255'],
+            'building' => ['required', Rule::in(Room::BUILDING_NAMES)],
             'status' => ['required', 'string', 'max:255'],
             'availabilities.Monday.opening_hours' => 'nullable|required_with:availabilities.Monday.closing_hours|before:availabilities.Monday.closing_hours',
             'availabilities.Monday.closing_hours' => 'nullable|required_with:availabilities.Monday.opening_hours|after:availabilities.Monday.opening_hours',
@@ -167,7 +169,7 @@ class RoomController extends Controller
             'availabilities.Saturday.closing_hours' => 'nullable|required_with:availabilities.Saturday.opening_hours|after:availabilities.Saturday.opening_hours',
             'availabilities.Sunday.opening_hours' => 'nullable|required_with:availabilities.Sunday.closing_hours|before:availabilities.Sunday.closing_hours',
             'availabilities.Sunday.closing_hours' => 'nullable|required_with:availabilities.Sunday.opening_hours|after:availabilities.Sunday.opening_hours',
-            'room_type' => ['required', 'string', 'max:255']
+            'room_type' => ['required', Rule::in(Room::ROOM_TYPES)]
         ]);
 
         $room->fill($request->except('attributes'))->save();
