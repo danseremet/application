@@ -59,7 +59,7 @@ class RoomController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'number' => ['required', 'string', 'max:255'],
             'floor' => ['required', 'integer'],
-            'building' => ['required', Rule::in(config('room.buildings'))],
+            'building' => ['required', Rule::in(config('rooms.buildings'))],
             'status' => ['required', 'string', 'max:255'],
             'capacity_standing' => ['nullable', 'integer'],
             'capacity_sitting' => ['nullable', 'integer'],

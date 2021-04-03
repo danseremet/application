@@ -25,7 +25,7 @@ class RoomFactory extends Factory
             'name' => $this->faker->word,
             'number' => $this->faker->word,
             'floor' => $this->faker->RandomDigit,
-            'building' => $this->faker->randomElement(config('room.buildings')),
+            'building' => $this->faker->randomElement(config('rooms.buildings')),
             'status' => $this->faker->randomElement(["available", "unavailable"]),
             'room_type' => $this->faker->randomElement(config('rooms.types')),
             'min_days_advance' => $this->faker->numberBetween(0, 4),
