@@ -17,6 +17,8 @@ class CommentObserver
             foreach ($reviewers as $reviewer) {
                 $reviewer->notify(new CommentNotification($comment));
             }
+            # Also notify the user
+            $booking->requester()->first()->notify(new CommentNotification(($comment)));
         }
     }
 }
