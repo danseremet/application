@@ -4,10 +4,13 @@ namespace Tests\Browser;
 
 use App\Models\BookingRequest;
 use App\Models\User;
+use App\Notifications\CommentNotification;
 use Database\Seeders\RolesAndPermissionsSeeder;
 use Database\Seeders\RoomSeeder;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
+use Illuminate\Support\Facades\Mail;
 use Laravel\Dusk\Browser;
+use SlevomatCodingStandard\Helpers\Comment;
 use Tests\DuskTestCase;
 
 class BookingReviewTest extends DuskTestCase
@@ -64,5 +67,9 @@ class BookingReviewTest extends DuskTestCase
                 ->scrollTo('.ProseMirror')
                 ->assertSee("This is a test comment.");
         });
+
+        $this->assertDatabaseHas('email_log', [
+            'subject' => __('Comment Notification')
+        ]);
     }
 }

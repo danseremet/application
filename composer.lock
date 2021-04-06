@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "e277f4920088f736433e4786b053c3ed",
+    "content-hash": "ef2c15a72c977ebb0deca852c8d9d6c9",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -10878,6 +10878,58 @@
             "time": "2019-11-01T13:20:14+00:00"
         },
         {
+            "name": "shvetsgroup/laravel-email-database-log",
+            "version": "8.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/shvetsgroup/laravel-email-database-log.git",
+                "reference": "ac5f7a14165c55d4e65cf79860b95b6cc410886a"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/shvetsgroup/laravel-email-database-log/zipball/ac5f7a14165c55d4e65cf79860b95b6cc410886a",
+                "reference": "ac5f7a14165c55d4e65cf79860b95b6cc410886a",
+                "shasum": ""
+            },
+            "require": {
+                "doctrine/dbal": "*",
+                "illuminate/support": "~5.0|~6.0|~7.0|~8.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "ShvetsGroup\\LaravelEmailDatabaseLog\\LaravelEmailDatabaseLogServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "ShvetsGroup\\LaravelEmailDatabaseLog\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Alexander Shvets",
+                    "email": "neochief@shvetsgroup.com"
+                }
+            ],
+            "description": "A simple database logger for all outgoing emails sent by Laravel website.",
+            "keywords": [
+                "laravel",
+                "markdown"
+            ],
+            "support": {
+                "issues": "https://github.com/shvetsgroup/laravel-email-database-log/issues",
+                "source": "https://github.com/shvetsgroup/laravel-email-database-log/tree/8.0.0"
+            },
+            "time": "2020-11-12T14:15:39+00:00"
+        },
+        {
             "name": "slevomat/coding-standard",
             "version": "6.4.1",
             "source": {
@@ -11480,5 +11532,5 @@
         "ext-zip": "*"
     },
     "platform-dev": [],
-    "plugin-api-version": "1.1.0"
+    "plugin-api-version": "2.0.0"
 }
