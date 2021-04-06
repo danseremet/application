@@ -70,7 +70,7 @@
           <em class="fas fa-redo"></em>
         </button>
 
-        <button @click="saveText()">
+        <button dusk="saveText" @click="saveText()">
           <em class="fas fa-paper-plane"></em>
         </button>
       </div>
