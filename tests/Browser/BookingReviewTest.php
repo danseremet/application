@@ -38,7 +38,7 @@ class BookingReviewTest extends DuskTestCase
             $browser->loginAs(User::first());
             $browser->visit('/bookings/review')
                 ->clickLink('Open Details')
-                ->pause(5000)
+                ->pause(250)
                 ->assertPathIs('/bookings/' . $booking->id . '/review')
                 ->assertSee('Booking History');
         });
@@ -56,7 +56,7 @@ class BookingReviewTest extends DuskTestCase
             $browser->loginAs(User::first());
             $browser->visit('/bookings/review')
                 ->clickLink('Open Details')
-                ->pause(5000)
+                ->pause(250)
                 ->assertPathIs('/bookings/' . $booking->id . '/review')
                 ->assertSee('Booking History')
                 ->scrollTo('.ProseMirror')
