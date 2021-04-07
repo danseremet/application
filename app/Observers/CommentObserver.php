@@ -15,10 +15,10 @@ class CommentObserver
             $booking = $comment->booking()->first();
             $reviewers = $booking->reviewers()->get();
             foreach ($reviewers as $reviewer) {
-                $reviewer->notify(new CommentNotification($comment));
+                $reviewer->notify(new CommentNotification($comment, $booking));
             }
             # Also notify the user
-            $booking->requester()->first()->notify(new CommentNotification(($comment)));
+            $booking->requester()->first()->notify(new CommentNotification($comment, $booking));
         }
     }
 }

@@ -8,6 +8,7 @@ use App\Notifications\CommentNotification;
 use Database\Seeders\RolesAndPermissionsSeeder;
 use Database\Seeders\RoomSeeder;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use Laravel\Dusk\Browser;
 use SlevomatCodingStandard\Helpers\Comment;
@@ -38,7 +39,7 @@ class BookingReviewTest extends DuskTestCase
             $browser->loginAs(User::first());
             $browser->visit('/bookings/review')
                 ->clickLink('Open Details')
-                ->pause(250)
+                ->waitFor('@saveText')
                 ->assertPathIs('/bookings/' . $booking->id . '/review')
                 ->assertSee('Booking History');
         });
@@ -51,12 +52,14 @@ class BookingReviewTest extends DuskTestCase
             ->hasReservations(random_int(1, 3))
             ->create(["status" => BookingRequest::REVIEW])->first();
 
-        $this->browse(function (Browser $browser) use ($booking)
+        $user = User::first();
+
+        $this->browse(function (Browser $browser) use ($user, $booking)
         {
-            $browser->loginAs(User::first());
+            $browser->loginAs($user);
             $browser->visit('/bookings/review')
                 ->clickLink('Open Details')
-                ->pause(250)
+                ->waitFor('@saveText')
                 ->assertPathIs('/bookings/' . $booking->id . '/review')
                 ->assertSee('Booking History')
                 ->scrollTo('.ProseMirror')
@@ -69,7 +72,7 @@ class BookingReviewTest extends DuskTestCase
         });
 
         $this->assertDatabaseHas('email_log', [
-            'subject' => __('Comment Notification')
+            'to' => $user->email,
         ]);
     }
 }

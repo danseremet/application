@@ -2,25 +2,31 @@
 
 namespace App\Notifications;
 
+use App\Models\BookingRequest;
 use App\Models\Comment;
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
+use Illuminate\Support\HtmlString;
+use Nette\Utils\Html;
 
 class CommentNotification extends Notification
 {
     use Queueable;
 
     private Comment $comment;
+    private BookingRequest $booking;
 
     /**
      * Create a new notification instance.
      *
-     * @return void
+     * @param Comment $comment
+     * @param BookingRequest $booking
      */
-    public function __construct(Comment $comment)
+    public function __construct(Comment $comment, BookingRequest $booking)
     {
         $this->comment = $comment;
+        $this->booking = $booking;
     }
 
     /**
@@ -42,22 +48,24 @@ class CommentNotification extends Notification
      */
     public function toMail($notifiable)
     {
-        return (new MailMessage)
-            ->line('There are new comments on a booking.')
-            ->action('View Review', url('/bookings/' . $this->comment->booking_id . '/review'))
-            ->line('Thank you for using our application!');
-    }
+        $commenter = $this->comment->user()->first()->name;
 
-    /**
-     * Get the array representation of the notification.
-     *
-     * @param mixed $notifiable
-     * @return array
-     */
-    public function toArray($notifiable)
-    {
-        return [
-            //
-        ];
+        $requester = $this->booking->requester()->first();
+        $requesterName = $requester->name;
+        $event = $this->booking->event;
+        $room = $this->booking->rooms()->first();
+        $url = route('bookings.reviews.show', $this->comment->booking_id);
+        return (new MailMessage)
+            ->subject('New review comments from ' . $commenter . ' on for Event: ' . $event['title'])
+            ->greeting('New review comments from ' . $commenter . ':')
+            ->line(new HtmlString($this->comment->body))
+            ->line(new HtmlString(
+                '<p><b>Booking Officer:</b> ' . $requesterName . '<br>' .
+                '<b>Email:</b> ' . $requester->email . '<br>' .
+                '<b>Event Title:</b> ' . $event['title'] . '<br>' .
+                '<b>Room name:</b> ' . $room['name'] . '<br>' .
+                '<b>Room number:</b> ' . $room['number'] . '<br></p>'
+            ))
+            ->action('View Review', $url);
     }
 }
