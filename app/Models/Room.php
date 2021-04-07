@@ -150,9 +150,9 @@ class Room extends Model
         $max_days = $special_max ?? $this->max_days_advance;
 
         if (Carbon::today()->diffInDays($startTime) < $min_days) {
-            $fail('You can not book this room later than ' . $min_days . ' days in advance');
+            $fail('You can not book this room earlier than ' . $min_days . ' days in advance');
         } elseif (Carbon::today()->diffInDays($startTime) > $max_days) {
-            $fail('You can not book this room sooner than ' . $max_days . ' days in advance');
+            $fail('You can not book this room later than ' . $max_days . ' days in advance');
         }
     }
 
@@ -214,5 +214,17 @@ class Room extends Model
       $startTime < $availabilityStart->opening_hours ||
       $endTime > $availabilityEnd->closing_hours;
   }
+
+
+
+  public function minimumReservationTime($startDate, $endDate, $fail)
+  {
+      $startTime = Carbon::parse($startDate);
+      $endTime = Carbon::parse($endDate);
+      if($endTime->diffInMinutes($startTime) < 30){
+        $fail('The room cannot be booked for less than 30 min');
+      }
+  }
+
 
 }
