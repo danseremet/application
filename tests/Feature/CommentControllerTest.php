@@ -26,17 +26,21 @@ class CommentControllerTest extends TestCase
         $booking = BookingRequest::factory()->create(['status'=>BookingRequest::REVIEW]);
         $this->assertDatabaseCount('comments', 0);
         $comment = '<p>test</p>';
-        $response = $this->actingAs($user)->post("/bookings/{$booking->id}/comment/",
-            ['comment' => $comment]
-        );
-        $response->assertStatus(302);
-        $this->assertDatabaseCount('comments', 1);
-        $this->assertDatabaseHas('comments', [
-            'system' => false,
-            'body' => $comment,
-        ]);
 
-        $response = $this->actingAs($user)->get(route('bookings.view', $booking));
-        $response->assertSessionHasNoErrors();
+        Comment::withoutEvents(function () use ($booking, $comment, $user) {
+            $response = $this->actingAs($user)->post("/bookings/{$booking->id}/comment/",
+                ['comment' => $comment]
+            );
+
+            $response->assertStatus(302);
+            $this->assertDatabaseCount('comments', 1);
+            $this->assertDatabaseHas('comments', [
+                'system' => false,
+                'body' => $comment,
+            ]);
+
+            $response = $this->actingAs($user)->get(route('bookings.view', $booking));
+            $response->assertSessionHasNoErrors();
+        });
     }
 }
