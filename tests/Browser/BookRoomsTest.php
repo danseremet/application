@@ -2,6 +2,7 @@
 
 namespace Tests\Browser;
 
+use App\Models\BookingRequest;
 use App\Models\Room;
 use App\Models\User;
 use Database\Seeders\EasyUserSeeder;
@@ -199,6 +200,7 @@ class BookRoomsTest extends DuskTestCase
                 ->type('#attendees', 3)
                 ->pause(250);
 
+            # Covers "Attach Reference Files #185"
             $browser->mouseover('#submit-booking-create')
                 ->check("#bake-sale-checkbox")
                 ->assertSee('Please remember to attach a filled out "Bake Sale Form" to the document section')
@@ -216,4 +218,30 @@ class BookRoomsTest extends DuskTestCase
         });
     }
 
+    /**
+     * AT #289 "View all the documents and forms that have been submitted with a booking request"
+     * This test checks if the reference path that was saved is present in the vue component.
+     * The testing of opening files is performed in feature tests.
+     */
+    public function testViewDocumentsAndFormsSubmitted()
+    {
+        $this->browse(function (Browser $browser)
+        {
+            $admin = User::all()->first();
+
+            if($admin === null) {
+                $admin = User::factory()->create();
+                $admin->assignRole('super-admin');
+            }
+            $booking = BookingRequest::factory()->make(['status'=>BookingRequest::PENDING]);
+            $path = 'reference_path';
+            $booking->reference = ['path' => $path];
+            $booking->save();
+            $browser->loginAs($admin);
+            $browser->visit('/bookings');
+
+            $browser->visit('/bookings')
+                ->assertVue('bookings[0].reference.path', $path, '@bookings-table');
+        });
+    }
 }

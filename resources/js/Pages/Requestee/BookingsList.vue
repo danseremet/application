@@ -4,6 +4,7 @@
              <BookingsTable
             :bookings="dataBookings"
             @filterBookingsJson="filterBookingsJson($event)"
+            dusk="bookings-table"
             />
         </div>
     </app-layout>
