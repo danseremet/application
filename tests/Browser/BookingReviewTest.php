@@ -57,10 +57,6 @@ class BookingReviewTest extends DuskTestCase
 
         $this->browse(function (Browser $browser) use ($user, $booking)
         {
-            $mail = $browser->fake(Mail::class);
-            $mail->assertNothingSent();
-
-
             $browser->loginAs($user);
             $browser->visit('/bookings/review')
                 ->clickLink('Open Details')
@@ -74,10 +70,6 @@ class BookingReviewTest extends DuskTestCase
                 ->click('[dusk=comment-textbox] > [dusk=submit]')
                 ->scrollTo('.ProseMirror')
                 ->waitForText("This is a test comment.");
-
-            $mail->assertSent(CommentMailable::class);
-
-
         });
     }
 }
