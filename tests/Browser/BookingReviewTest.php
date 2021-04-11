@@ -2,12 +2,16 @@
 
 namespace Tests\Browser;
 
+use App\Mail\CommentMailable;
 use App\Models\BookingRequest;
 use App\Models\User;
+use App\Notifications\CommentNotification;
 use Database\Seeders\RolesAndPermissionsSeeder;
 use Database\Seeders\RoomSeeder;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Notification;
 use Laravel\Dusk\Browser;
 use Tests\DuskTestCase;
 
@@ -53,6 +57,10 @@ class BookingReviewTest extends DuskTestCase
 
         $this->browse(function (Browser $browser) use ($user, $booking)
         {
+            $mail = $browser->fake(Mail::class);
+            $mail->assertNothingSent();
+
+
             $browser->loginAs($user);
             $browser->visit('/bookings/review')
                 ->clickLink('Open Details')
@@ -66,11 +74,10 @@ class BookingReviewTest extends DuskTestCase
                 ->releaseMouse()
                 ->scrollTo('.ProseMirror')
                 ->assertSee("This is a test comment.");
-        });
 
-        dump(DB::table('email_log')->get(['to', 'from']));
-        $this->assertDatabaseHas('email_log', [
-            'to' => $user->email,
-        ]);
+            $mail->assertSent(CommentMailable::class);
+
+
+        });
     }
 }

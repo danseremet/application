@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "cf1281791edd1a4ab09024e2b97e9ec5",
+    "content-hash": "eb9c05425f2eb0cf555fed330f283958",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -7536,6 +7536,61 @@
                 "validation"
             ],
             "time": "2021-01-11T03:05:59+00:00"
+        },
+        {
+            "name": "noeldemartin/laravel-dusk-mocking",
+            "version": "v6.5.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/NoelDeMartin/laravel-dusk-mocking.git",
+                "reference": "fba7a08e8f3021847c54ebef732f8dfa4666d866"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/NoelDeMartin/laravel-dusk-mocking/zipball/fba7a08e8f3021847c54ebef732f8dfa4666d866",
+                "reference": "fba7a08e8f3021847c54ebef732f8dfa4666d866",
+                "shasum": ""
+            },
+            "require": {
+                "laravel/dusk": ">=5.4.0",
+                "laravel/framework": ">=6.0.0",
+                "php": ">=7.2.0"
+            },
+            "require-dev": {
+                "fakerphp/faker": "^1.13",
+                "mockery/mockery": ">=1.2.3",
+                "phpunit/phpunit": ">=8.3.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "NoelDeMartin\\LaravelDusk\\MockingServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "NoelDeMartin\\LaravelDusk\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Noel De Martin",
+                    "email": "noeldemartin@gmail.com"
+                }
+            ],
+            "description": "Mock facades in Laravel Dusk tests.",
+            "keywords": [
+                "dusk",
+                "laravel",
+                "testing"
+            ],
+            "time": "2021-03-15T19:47:51+00:00"
         },
         {
             "name": "nunomaduro/collision",
