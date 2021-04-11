@@ -2,16 +2,11 @@
 
 namespace Tests\Browser;
 
-use App\Mail\CommentMailable;
 use App\Models\BookingRequest;
 use App\Models\User;
-use App\Notifications\CommentNotification;
 use Database\Seeders\RolesAndPermissionsSeeder;
 use Database\Seeders\RoomSeeder;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Notification;
 use NoelDeMartin\LaravelDusk\Browser;
 use Tests\DuskTestCase;
 
@@ -67,9 +62,11 @@ class BookingReviewTest extends DuskTestCase
             $browser->scrollTo('.ProseMirror')
                 ->click('.ProseMirror')
                 ->type('.ProseMirror', 'This is a test comment.')
-                ->click('[dusk=comment-textbox] > [dusk=submit]')
-                ->scrollTo('.ProseMirror')
-                ->waitForText("This is a test comment.");
+                ->with('#comment-textbox', function ($b) {
+                    $b->click('@submit');
+                    $b->waitUntilMissingText('This is a test comment.');
+                })
+                ->waitForText('This is a test comment.');
         });
     }
 }

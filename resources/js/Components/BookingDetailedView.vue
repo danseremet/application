@@ -570,7 +570,7 @@
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
                     </svg>
                   </span>
-                </div>             
+                </div>
               </div>
               <div class="flex flex-col">
                   <div class="flex items-center flex-1 px-4 font-bold leading-tight">
@@ -592,7 +592,7 @@
           <div class="flex flex-col space-y-4 w-full">
             <div class="flex space-x-2 w-full">
               <RichTextEditor
-                dusk="comment-textbox"
+                id="comment-textbox"
                 class="w-full"
                 :editable="true"
                 :incomingText="''"
