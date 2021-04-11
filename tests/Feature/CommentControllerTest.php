@@ -8,6 +8,7 @@ use App\Models\Comment;
 use App\Models\Room;
 use App\Models\User;
 use Carbon\Carbon;
+use Database\Factories\ReservationFactory;
 use Database\Seeders\RolesAndPermissionsSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -33,27 +34,7 @@ class CommentControllerTest extends TestCase
         $start = Carbon::parse($date);
         $end = $start->copy()->addMinutes(4);
 
-        $response = $this->actingAs($user)->post('/bookings', [
-            'room_id' => $room->id,
-            'reservations' => [
-                [
-                    'start_time' => $start->format('Y-m-d H:i:00'),
-                    'end_time' => $end->format('Y-m-d H:i:00'),
-                    'duration' => $this->faker->numberBetween(100)
-                ]
-            ],
-            'event' => [
-                'start_time' => $start->copy()->addMinute()->format('H:i'),
-                'end_time' => $end->copy()->subMinute()->format('H:i'),
-                'title' => $this->faker->word,
-                'type' => $this->faker->word,
-                'description' => $this->faker->paragraph,
-                'guest_speakers' => $this->faker->name,
-                'attendees' => $this->faker->numberBetween(100),
-            ]
-        ]);
-        $response->assertStatus(302);
-        $booking = BookingRequest::first();
+        $booking = BookingRequest::factory()->hasReservations(1, ['room_id'=>$room->id])->create(['status'=>BookingRequest::REVIEW]);
 
         $this->assertDatabaseCount('comments', 0);
 

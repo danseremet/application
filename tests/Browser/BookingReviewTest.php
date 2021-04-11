@@ -7,6 +7,7 @@ use App\Models\User;
 use Database\Seeders\RolesAndPermissionsSeeder;
 use Database\Seeders\RoomSeeder;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
+use Illuminate\Support\Facades\DB;
 use Laravel\Dusk\Browser;
 use Tests\DuskTestCase;
 
@@ -67,6 +68,7 @@ class BookingReviewTest extends DuskTestCase
                 ->assertSee("This is a test comment.");
         });
 
+        dump(DB::table('email_log')->get(['to', 'from']));
         $this->assertDatabaseHas('email_log', [
             'to' => $user->email,
         ]);
