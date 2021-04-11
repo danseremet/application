@@ -40,7 +40,7 @@ class BookingReviewTest extends DuskTestCase
             $browser->loginAs(User::first());
             $browser->visit('/bookings/review')
                 ->clickLink('Open Details')
-                ->waitFor('@saveText')
+                ->waitForText('Booking Overview')
                 ->assertPathIs('/bookings/' . $booking->id . '/review')
                 ->assertSee('Booking History');
         });
@@ -64,7 +64,7 @@ class BookingReviewTest extends DuskTestCase
             $browser->loginAs($user);
             $browser->visit('/bookings/review')
                 ->clickLink('Open Details')
-                ->waitFor('@saveText')
+                ->waitForText('Booking Overview')
                 ->assertPathIs('/bookings/' . $booking->id . '/review')
                 ->assertSee('Booking History');
 
