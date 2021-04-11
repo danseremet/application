@@ -75,6 +75,7 @@
     <editor-content class="editor__content" :editor="editor" />
     <div class="flex space-x-10 items-center justify-end py-3 text-right mt-1">
         <jet-button
+            dusk="submit"
             @click.native="saveText()"
         >
           Submit
