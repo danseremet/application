@@ -71,7 +71,7 @@ class BookingReviewTest extends DuskTestCase
             $browser->scrollTo('.ProseMirror')
                 ->click('.ProseMirror')
                 ->type('.ProseMirror', 'This is a test comment.')
-                ->pressAndWaitFor('@saveText')
+                ->pressAndWaitFor('SUBMIT')
                 ->releaseMouse()
                 ->scrollTo('.ProseMirror')
                 ->assertSee("This is a test comment.");
