@@ -38,7 +38,6 @@
         "nunomaduro/phpinsights": "^1.14",
         "phpunit/phpunit": "^9.4",
         "roave/security-advisories": "dev-latest",
-        "shvetsgroup/laravel-email-database-log": "^8.0",
         "staudenmeir/dusk-updater": "^1.2"
     },
     "config": {

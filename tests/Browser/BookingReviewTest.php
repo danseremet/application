@@ -12,7 +12,7 @@ use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Notification;
-use Laravel\Dusk\Browser;
+use NoelDeMartin\LaravelDusk\Browser;
 use Tests\DuskTestCase;
 
 class BookingReviewTest extends DuskTestCase
@@ -66,8 +66,9 @@ class BookingReviewTest extends DuskTestCase
                 ->clickLink('Open Details')
                 ->waitFor('@saveText')
                 ->assertPathIs('/bookings/' . $booking->id . '/review')
-                ->assertSee('Booking History')
-                ->scrollTo('.ProseMirror')
+                ->assertSee('Booking History');
+
+            $browser->scrollTo('.ProseMirror')
                 ->click('.ProseMirror')
                 ->type('.ProseMirror', 'This is a test comment.')
                 ->pressAndWaitFor('@saveText')
