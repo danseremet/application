@@ -60,7 +60,7 @@ class UserController extends Controller
             $request->validateWithBag('createUser', [
                 'name' => ['required', 'string', self::MAX_255],
                 'email' => ['required', 'string', 'email', self::MAX_255, 'unique:users'],
-                'password' => ['required', 'string', self::MAX_255, 'confirmed'],
+                'password' => ['required', 'string', self::MAX_255, 'confirmed', 'min:8'],
             ]);
         }
 
